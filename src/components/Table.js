@@ -1,17 +1,88 @@
-import React from "react";
+import React, { Component } from "react";
+import API from "../utils/API"
+import TableRow from "./TableRow";
 
-export default function Table(props) {
-    return (
-        <tr className="text-center h5 text-light">
-            <td>
-                <img src={props.photo} alt={props.name} />
-            </td>
+class Table extends Component {
+    state = {
+        search: "",
+        results: [],
+        isAscending: true
+    }
+    componentDidMount() {
+        API.getEmployees()
+            .then(res => {
+                console.log("API RESULT", res.data.results);
+                this.setState({
+                    results: res.data.results
 
-            <td className="align-middle">{props.name}</td>
-            <td className="align-middle">{props.email}</td>
-            <td className="align-middle">{props.phone}</td>
-            <td className="align-middle">{props.location}</td>
-            <td className="align-middle">{props.dob}</td>
-        </tr>
-    );
-}
+                })
+            })
+            .catch(err => console.log(err))
+    }
+    sortingData = (event) => {
+        console.log(this.state.isAscending);
+        event.preventDefault();
+        this.setState({
+            results: this.state.results.sort((a, b) => {
+                if (this.state.isAscending === true) {
+                    //arange it ascending order by FIRST NAMES only 
+                    return (a.name.first < b.name.first) ? -1 : (a.name.first > b.name.first) ? 1 : 0
+                } else {
+                    //Descending order 
+                    return (a.name.first < b.name.first) ? 1 : (a.name.first > b.name.first) ? -1 : 0
+                }
+            })
+        });
+        //TOGGLE THE FLAG 
+        if (this.state.isAscending === true) {
+            //update the sate IS ASCENDING TO FLASE 
+            this.setState({
+                isAscending: false
+            })
+        } else {
+            this.setState({
+                isAscending: true
+            })
+        }
+
+
+    }
+    render() {
+        return (
+            <>
+
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Image</th>
+                            <th scope="col">Name <i className="fas fa-sort" onClick={this.sortingData}></i></th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Location</th>
+                            <th scope="col">DOB</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.results.map((employee, index) => (
+                                <TableRow
+                                    picture={employee.picture}
+                                    name={employee.name}
+                                    email={employee.email}
+                                    phone={employee.phone}
+                                    location={employee.location}
+                                    dob={employee.dob}
+                                    index={index}
+                                />
+
+                            ))
+                        }
+
+                    </tbody>
+                </table>
+            </>
+        );
+    }
+};
+
+export default Table;
