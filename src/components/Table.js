@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import API from "../utils/API"
 import TableRow from "./TableRow";
+import SearchForm from "./SearchForm";
+import "./styles.css";
 
 class Table extends Component {
     state = {
@@ -8,6 +10,7 @@ class Table extends Component {
         results: [],
         isAscending: true
     }
+    //Loads random users from the API when the component mounts
     componentDidMount() {
         API.getEmployees()
             .then(res => {
@@ -19,6 +22,8 @@ class Table extends Component {
             })
             .catch(err => console.log(err))
     }
+
+    //Sorts the data in ascending or descending order by the employee's last name
     sortingData = (event) => {
         console.log(this.state.isAscending);
         event.preventDefault();
@@ -26,10 +31,10 @@ class Table extends Component {
             results: this.state.results.sort((a, b) => {
                 if (this.state.isAscending === true) {
                     //arange it ascending order by FIRST NAMES only 
-                    return (a.name.first < b.name.first) ? -1 : (a.name.first > b.name.first) ? 1 : 0
+                    return (a.name.last < b.name.last) ? -1 : (a.name.last > b.name.last) ? 1 : 0
                 } else {
                     //Descending order 
-                    return (a.name.first < b.name.first) ? 1 : (a.name.first > b.name.first) ? -1 : 0
+                    return (a.name.last < b.name.last) ? 1 : (a.name.last > b.name.last) ? -1 : 0
                 }
             })
         });
@@ -47,9 +52,25 @@ class Table extends Component {
 
 
     }
+
+    // Filters the data by the employee's name
+    handleInputChange = (event) => {
+        const value = event.target.value;
+        this.setState({ search: value });
+        this.filterEmployees(value.toLowerCase().trim());
+    };
+
+    // add filterEmployee function
+
+    handleFormSubmit = (event) => {
+        event.preventDefault();
+    };
+
+    // renders the table
     render() {
         return (
             <wrapper>
+                <SearchForm handleInputChange={this.handleInputChange} search={this.state.search} />
 
                 <table className="table table-striped">
                     <thead>
