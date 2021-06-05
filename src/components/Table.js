@@ -49,16 +49,15 @@ class Table extends Component {
     }
     render() {
         return (
-            <>
+            <wrapper>
 
                 <table className="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Image</th>
+                            <th scope="col"></th>
                             <th scope="col">Name <i className="fas fa-sort" onClick={this.sortingData}></i></th>
                             <th scope="col">Email</th>
                             <th scope="col">Phone</th>
-                            <th scope="col">Location</th>
                             <th scope="col">DOB</th>
                         </tr>
                     </thead>
@@ -70,7 +69,6 @@ class Table extends Component {
                                     name={employee.name}
                                     email={employee.email}
                                     phone={employee.phone}
-                                    location={employee.location}
                                     dob={employee.dob}
                                     index={index}
                                 />
@@ -80,7 +78,7 @@ class Table extends Component {
 
                     </tbody>
                 </table>
-            </>
+            </wrapper>
         );
     }
 };
