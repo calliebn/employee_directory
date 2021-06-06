@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import API from "../utils/API"
+import API from "../utils/API";
 import TableRow from "./TableRow";
-import SearchForm from "./SearchForm";
+import SearchForm from "../Search";
 import "./styles.css";
 
 class Table extends Component {
@@ -16,7 +16,7 @@ class Table extends Component {
             .then(res => {
                 console.log("API RESULT", res.data.results);
                 this.setState({
-                    results: res.data.results
+                    results: res.data.results,
 
                 })
             })
