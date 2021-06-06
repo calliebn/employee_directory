@@ -1,11 +1,11 @@
 import './App.css';
-import Table from "../src/components/Table"
+import Container from "./components/Container/Container";
 
 function App() {
   return (
     <div className="App">
       <h1>JUMBotron</h1>
-      <Table />
+      <Container />
     </div>
   );
 }
