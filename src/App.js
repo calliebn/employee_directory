@@ -1,11 +1,12 @@
 import './App.css';
-import Container from "./components/Container/Container";
+import Table from "./components/Table";
+import Header from "./components/Header";
 
 function App() {
   return (
     <div className="App">
-      <h1>JUMBotron</h1>
-      <Container />
+      <Header />
+      <Table />
     </div>
   );
 }
