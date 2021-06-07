@@ -4,25 +4,54 @@ import TableRow from "./TableRow"
 import SearchForm from "./SearchForm";
 import "./styles.css";
 
+
 class Table extends Component {
     state = {
         search: "",
         results: [],
         isAscending: true,
-        filteredEmployees: []
     }
     //Loads random users from the API when the component mounts
     componentDidMount() {
+        this.getEmployees();
+    }
+
+    // Generates a list of employees
+    getEmployees = () => {
         API.getEmployees()
             .then(res => {
-                console.log("API RESULT", res.data.results);
                 this.setState({
                     results: res.data.results,
-                    filterEmployees: res.data.results
-
                 })
             })
             .catch(err => console.log(err))
+    }
+
+    // Filters the data by name
+    searchPeople = event => {
+        event.preventDefault();
+        console.log("Filter user", this.state.search);
+        if (this.state.search === "") {
+            //resetting the table
+            this.getEmployees();
+        } else {
+
+            //Filters out the specific user 
+            const filteredEmployees = this.state.results.filter(employee => employee.name.first.toLowerCase() === this.state.search.toLowerCase() || employee.name.last.toLowerCase() === this.state.search.toLowerCase());
+            console.log(filteredEmployees)
+            this.setState({ results: filteredEmployees })
+
+        }
+
+    }
+
+    handleInputChange = event => {
+        event.preventDefault();
+        console.log("HIC", event.target.value);
+        this.setState({
+            search: event.target.value
+        })
+
     }
 
     //Sorts the data in ascending or descending order by the employee's last name
@@ -32,7 +61,7 @@ class Table extends Component {
         this.setState({
             results: this.state.results.sort((a, b) => {
                 if (this.state.isAscending === true) {
-                    //arange it ascending order by FIRST NAMES only 
+                    //arange it ascending order by LAST NAMES only 
                     return (a.name.last < b.name.last) ? -1 : (a.name.last > b.name.last) ? 1 : 0
                 } else {
                     //Descending order 
@@ -55,26 +84,13 @@ class Table extends Component {
 
     }
 
-    // Filters the data by the employee's name
-    handleInputChange = (event) => {
-        const value = event.target.value;
-        this.setState({ search: value });
-        // this.filterEmployees({ search: value });
-    };
-
-    // add filterEmployee function
-
-    handleFormSubmit = (event) => {
-        event.preventDefault();
-    };
-
+    // Formats the DOB
     formatDate = (date) => {
         date = new Date(date);
         let dob = [];
         dob.push(("0" + (date.getMonth() + 1)).slice(-2));
         dob.push(("0" + date.getDate()).slice(-2));
         dob.push(date.getFullYear());
-
         return dob.join("-");
     }
 
@@ -82,7 +98,7 @@ class Table extends Component {
     render() {
         return (
             <wrapper>
-                <SearchForm handleInputChange={this.handleInputChange} search={this.state.search} />
+                <SearchForm handleInputChange={this.handleInputChange} search={this.state.search} handleFormSubmit={this.searchPeople} />
 
                 <table className="table table-light table-striped">
                     <thead>
@@ -98,11 +114,12 @@ class Table extends Component {
                         {
                             this.state.results.map((employee, index) => (
                                 <TableRow
+                                    key={index}
                                     picture={employee.picture}
                                     name={employee.name}
                                     email={employee.email}
                                     phone={employee.phone}
-                                    dob={employee.dob}
+                                    dob={this.formatDate(employee.dob.date)}
                                     index={index}
                                 />
 

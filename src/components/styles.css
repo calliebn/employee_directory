@@ -15,10 +15,12 @@ header p {
   color: #f1f7ed;
 }
 
-.wrapper {
+wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 form {
@@ -26,11 +28,12 @@ form {
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+  width: 40%;
 }
 
 /* Controls the width of the search bar */
 .form-group {
-  width: 30%;
+  width: 80%;
 }
 
 /* thead,

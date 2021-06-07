@@ -2,7 +2,7 @@ import React from "react";
 
 function SearchForm(props) {
     return (
-        <form>
+        <form onSubmit={props.handleFormSubmit}>
             <div className="form-group">
                 <input
                     onChange={props.handleInputChange}
