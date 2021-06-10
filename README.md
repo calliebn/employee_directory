@@ -39,6 +39,8 @@ NA
 
 ## Links
 
+https://calliebn.github.io/employee_directory/
+
 ## Contributors
 
 Callie Nipper
